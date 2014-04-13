@@ -3,14 +3,19 @@ package com.chatter.box;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.io.IOException;
@@ -19,10 +24,10 @@ import java.io.IOException;
 public class ListenRecord extends Activity {
 
     //private instance fields
-    private Button mButton;
+    private ImageView mImage;
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
-    private static final String LOG_TAG = "AudioRecordTest";
+    private static final String LOG_TAG = "AudioRecord";
     private String mFileName;
 
 
@@ -38,7 +43,7 @@ public class ListenRecord extends Activity {
 
     //Start for recording
     private void startRecording() {
-
+        mImage.setColorFilter(Color.argb(255, 255, 120, 100));
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -56,6 +61,7 @@ public class ListenRecord extends Activity {
 
     //Stops recording
     private void stopRecording() {
+        mImage.setColorFilter(Color.argb(255, 255, 255, 255));
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
@@ -64,6 +70,7 @@ public class ListenRecord extends Activity {
 
     //Switches content view to record mode
     private void switchToRecord() {
+        this.getActionBar().setTitle("Press To Start And Stop");
         if(mPlayer != null) {
             mPlayer.release();
             mPlayer = null;
@@ -71,8 +78,13 @@ public class ListenRecord extends Activity {
 
         //creates recording
         LinearLayout ll = new LinearLayout(this);
-        mButton = new RecordButton(this);
-        ll.addView(mButton,
+        mImage = new MicImage(this);
+
+        mImage.setBaselineAlignBottom(true);
+        mImage.setColorFilter(Color.argb(255, 255, 255, 255));
+
+
+        ll.addView(mImage,
                 new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -85,25 +97,21 @@ public class ListenRecord extends Activity {
     }
 
     //Class for making a button for recording voice
-    class RecordButton extends Button {
+    class MicImage extends ImageView {
         boolean mStartRecording = true;
 
         OnClickListener clicker = new OnClickListener() {
             public void onClick(View v) {
                 onRecord(mStartRecording);
-                if( mStartRecording) {
-                    setText("Stop Recording");
-                }else {
-                    setText("Start Recording");
-                }
                 mStartRecording = !mStartRecording;
             }
         };
 
-        public RecordButton(Context ctx) {
+        public MicImage(Context ctx) {
             super (ctx);
-            setText("Start Recording");
             setOnClickListener(clicker);
+            setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.mic));
+
         }
     }
 
@@ -116,6 +124,7 @@ public class ListenRecord extends Activity {
 
 
     public void onPlay(boolean start) {
+        this.getActionBar().setDisplayHomeAsUpEnabled(false);
         if(start)
             startPlayback();
         else
@@ -123,40 +132,36 @@ public class ListenRecord extends Activity {
     }
 
     private void startPlayback() {
-            mPlayer.start();
+        mImage.setColorFilter(Color.argb(255, 120, 255, 120));
+        mPlayer.start();
     }
 
     private void pausePlayback() {
-            mPlayer.pause();
+        mImage.setColorFilter(Color.argb(255, 255, 255, 255));
+        mPlayer.pause();
     }
 
     //Class for making a button for recording voice
-    class PlayButton extends Button {
+    class PlayImage extends ImageView {
         boolean mPaused = true;
 
         OnClickListener clicker = new OnClickListener() {
             public void onClick(View v) {
                 onPlay(mPaused);
-                if(mPaused) {
-                    setText("Press to pause");
-                }else {
-                    setText("Press to listen");
-                }
                 mPaused = !mPaused;
             }
         };
 
-        public PlayButton(Context ctx) {
-            super (ctx);
-            setText("Press to listen");
+        public PlayImage(Context ctx) {
+            super(ctx);
             setOnClickListener(clicker);
-
+            setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.triangle));
+            setColorFilter(Color.argb(255, 255, 255, 255));
             mPlayer = new MediaPlayer();
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                  public void onCompletion(MediaPlayer mp) {
                      switchToRecord();
             }});
-
 
             try {
                 mPlayer.setDataSource(mFileName);
@@ -171,12 +176,6 @@ public class ListenRecord extends Activity {
     public void returnHome(){
         finish();
     }
-
-
-
-
-
-
 
 
     //Destructor
@@ -198,14 +197,20 @@ public class ListenRecord extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        this.getActionBar().setIcon(new ColorDrawable(0x0000));
+        this.getActionBar().setTitle("Press Play And Listen");
 
         //sets where file is to be stored
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/test.3gp";
 
+
         LinearLayout ll = new LinearLayout(this);
-        mButton = new PlayButton(this);
-        ll.addView(mButton,
+        mImage = new PlayImage(this);
+
+        mImage.setBaselineAlignBottom(true);
+
+        ll.addView(mImage,
                 new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT,

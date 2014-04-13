@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="FeedActionBarTheme"
-            parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="FeedTheme" parent="android:Widget.Holo.Light">
+        <item name="android:actionBarStyle">@style/FeedActionBar</item>
     </style>
+
+    <style name="FeedActionBar" parent="android:Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/orange</item>
+    </style>
+
+
 </resources>

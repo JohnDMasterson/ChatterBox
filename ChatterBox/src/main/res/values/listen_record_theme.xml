@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LRTheme" parent="android:Widget.Holo.Light">
+        <item name="android:actionBarStyle">@style/LRActionBar</item>
+    </style>
+
+    <style name="LRActionBar" parent="android:Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/orange</item>
+    </style>
+
+</resources>
