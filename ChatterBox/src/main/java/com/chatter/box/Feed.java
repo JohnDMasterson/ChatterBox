@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.Gravity;
 import android.view.View;
+import android.support.v4.app.Fragment;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -36,6 +37,10 @@ public class Feed extends ListActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+            Intent intent = new Intent(this, FB.class);
+            startActivity(intent);
+
 
 
         ProgressBar progressBar = new ProgressBar(this);

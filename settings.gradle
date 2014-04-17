@@ -1,1 +1,1 @@
-include ':ChatterBox'
+include ':ChatterBox', 'facebook-android-sdk-3.8.0'

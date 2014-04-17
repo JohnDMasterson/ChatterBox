@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -216,9 +217,7 @@ public class ListenRecord extends Activity {
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         0));
         setContentView(ll);
-
     }
-
 
 
 }
